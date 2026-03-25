@@ -1,7 +1,6 @@
 const Budget      = require('../models/Budget');
 const Transaction = require('../models/Transaction');
 
-// GET /api/budgets — with current spending
 const getAll = async (req, res) => {
   try {
     const budgets = await Budget.find({ userId: req.user._id });
@@ -10,7 +9,6 @@ const getAll = async (req, res) => {
     const start = new Date(now.getFullYear(), now.getMonth(), 1);
     const end   = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
-    // Aggregate spending per category this month
     const spending = await Transaction.aggregate([
       { $match: { userId: req.user._id, type: 'expense', date: { $gte: start, $lte: end } } },
       { $group: { _id: '$category', total: { $sum: '$amount' } } },
@@ -30,7 +28,6 @@ const getAll = async (req, res) => {
   }
 };
 
-// POST /api/budgets
 const create = async (req, res) => {
   try {
     const { category, limitAmount, period, icon, color } = req.body;
@@ -42,7 +39,6 @@ const create = async (req, res) => {
   }
 };
 
-// PUT /api/budgets/:id
 const update = async (req, res) => {
   try {
     const budget = await Budget.findOneAndUpdate(
@@ -57,7 +53,6 @@ const update = async (req, res) => {
   }
 };
 
-// DELETE /api/budgets/:id
 const remove = async (req, res) => {
   try {
     const budget = await Budget.findOneAndDelete({ _id: req.params.id, userId: req.user._id });

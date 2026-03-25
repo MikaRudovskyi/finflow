@@ -6,12 +6,10 @@ const mongoose = require('mongoose');
 const Category = require('../models/Category');
 
 const CATEGORIES = [
-  // Income
   { name: 'Зарплата',    icon: '💼', color: '#2dd4a0', type: 'income'  },
   { name: 'Фріланс',     icon: '💻', color: '#5b9cf6', type: 'income'  },
   { name: 'Інвестиції',  icon: '📈', color: '#a78bfa', type: 'income'  },
   { name: 'Подарунок',   icon: '🎁', color: '#f5b942', type: 'income'  },
-  // Expense
   { name: 'Продукти',    icon: '🛒', color: '#f97070', type: 'expense' },
   { name: 'Транспорт',   icon: '🚌', color: '#f5b942', type: 'expense' },
   { name: 'Комунальні',  icon: '💡', color: '#a78bfa', type: 'expense' },

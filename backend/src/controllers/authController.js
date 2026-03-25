@@ -5,7 +5,6 @@ const User = require('../models/User');
 const signToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN || '7d' });
 
-// POST /api/auth/register
 const register = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
@@ -24,7 +23,6 @@ const register = async (req, res) => {
   }
 };
 
-// POST /api/auth/login
 const login = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
@@ -37,7 +35,6 @@ const login = async (req, res) => {
     }
 
     const token = signToken(user._id);
-    // Remove hash before sending
     user.passwordHash = undefined;
 
     res.json({ token, user });
@@ -46,12 +43,10 @@ const login = async (req, res) => {
   }
 };
 
-// GET /api/auth/me
 const getMe = async (req, res) => {
   res.json({ user: req.user });
 };
 
-// PUT /api/auth/profile
 const updateProfile = async (req, res) => {
   const { name, currency, preferences } = req.body;
   try {

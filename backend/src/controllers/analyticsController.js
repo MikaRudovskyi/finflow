@@ -1,6 +1,5 @@
 const Transaction = require('../models/Transaction');
 
-// GET /api/analytics/summary?year=2026&month=3
 const getSummary = async (req, res) => {
   try {
     const now   = new Date();
@@ -38,7 +37,6 @@ const getSummary = async (req, res) => {
   }
 };
 
-// GET /api/analytics/by-category?type=expense&year=2026&month=3
 const getByCategory = async (req, res) => {
   try {
     const now   = new Date();
@@ -61,7 +59,6 @@ const getByCategory = async (req, res) => {
   }
 };
 
-// GET /api/analytics/monthly?year=2026&months=6
 const getMonthly = async (req, res) => {
   try {
     const year   = Number(req.query.year   || new Date().getFullYear());

@@ -1,0 +1,23 @@
+.page { display: flex; flex-direction: column; gap: 20px; }
+
+.chartsRow { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+.cardTitle { font-size: 14px; font-weight: 500; margin-bottom: 14px; }
+
+.catList { display: flex; flex-direction: column; gap: 12px; }
+
+.catHead { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.catDot  { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.catName { font-size: 13px; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.catAmt  { font-size: 13px; font-family: var(--mono); font-weight: 500; white-space: nowrap; flex-shrink: 0; }
+.catTrack { height: 5px; background: var(--bg4); border-radius: 3px; overflow: hidden; }
+.catFill  { height: 100%; border-radius: 3px; transition: width .4s ease; }
+
+@media (max-width: 1023px) { .chartsRow { grid-template-columns: 1fr; } }
+
+@media (max-width: 767px) {
+  .chartsRow { gap: 10px; }
+  .cardTitle { font-size: 13px; }
+  .catName   { font-size: 12px; }
+  .catAmt    { font-size: 12px; }
+}

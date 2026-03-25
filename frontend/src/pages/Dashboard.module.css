@@ -1,0 +1,50 @@
+.page { display: flex; flex-direction: column; gap: 20px; }
+
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.chartsRow {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 14px;
+}
+
+.cardTitle { font-size: 14px; font-weight: 500; margin-bottom: 14px; }
+
+.tableWrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 480px; }
+.table thead tr { border-bottom: 1px solid var(--border); }
+.table th {
+  color: var(--text2); font-weight: 400; text-align: left;
+  padding: 8px 10px 10px; font-size: 11px;
+  text-transform: uppercase; letter-spacing: .06em; white-space: nowrap;
+}
+.table td { padding: 11px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.table tr:last-child td { border-bottom: none; }
+.table tbody tr:hover td { background: var(--bg3); }
+
+.tdMuted { color: var(--text2); font-size: 12px; white-space: nowrap; }
+.catCell { display: inline-flex; align-items: center; gap: 6px; }
+.dot     { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.badge   { display: inline-flex; padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 500; white-space: nowrap; }
+.income  { background: var(--green-dim); color: var(--green); }
+.expense { background: var(--red-dim);   color: var(--red);   }
+
+@media (max-width: 1023px) {
+  .kpiGrid   { grid-template-columns: repeat(2, 1fr); }
+  .chartsRow { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 767px) {
+  .page      { gap: 12px; }
+  .kpiGrid   { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .chartsRow { gap: 10px; }
+  .cardTitle { font-size: 13px; margin-bottom: 10px; }
+}

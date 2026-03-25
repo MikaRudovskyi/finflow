@@ -1,0 +1,82 @@
+.page { display: flex; flex-direction: column; gap: 20px; }
+
+.hero {
+  background: linear-gradient(135deg, #1a2e22 0%, #162030 100%);
+  border: 1px solid rgba(45,212,160,0.2);
+  border-radius: var(--radius);
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.heroLabel  { font-size: 13px; color: var(--text2); margin-bottom: 4px; }
+.heroAmount { font-size: 36px; font-weight: 600; font-family: var(--mono); color: var(--green); line-height: 1.1; }
+.heroSub    { font-size: 12px; color: var(--text2); margin-top: 4px; }
+.heroRight  { text-align: right; }
+.heroRate   { font-size: 34px; font-weight: 600; color: var(--amber); }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+}
+
+.cardHead { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+.goalIcon { font-size: 26px; line-height: 1.2; }
+.delBtn {
+  background: none; border: none; cursor: pointer; color: var(--text3);
+  font-size: 13px; transition: color .13s; min-width: 30px; min-height: 30px;
+  padding: 4px; display: flex; align-items: center; justify-content: center; border-radius: 4px;
+}
+.delBtn:hover { color: var(--red); background: var(--red-dim); }
+
+.goalName   { font-size: 14px; font-weight: 500; }
+.goalSub    { font-size: 12px; color: var(--text2); margin-top: 2px; }
+.goalAmount { font-size: 22px; font-weight: 600; font-family: var(--mono); margin: 10px 0 4px; display: flex; align-items: center; gap: 6px; }
+.check      { font-size: 14px; }
+
+.track { height: 7px; background: var(--bg4); border-radius: 4px; overflow: hidden; margin: 8px 0 6px; }
+.fill  { height: 100%; border-radius: 4px; transition: width .5s ease; }
+
+.pctRow { display: flex; justify-content: space-between; align-items: center; }
+.pct    { font-size: 12px; font-family: var(--mono); font-weight: 500; }
+
+.emptyWrap { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; padding: 52px 20px; color: var(--text2); }
+.emptyIcon { font-size: 44px; margin-bottom: 12px; }
+
+.formRow { display: grid; grid-template-columns: 1fr 80px; gap: 12px; }
+
+.colorRow { display: flex; gap: 10px; flex-wrap: wrap; padding: 4px 0; }
+.colorDot {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 2.5px solid transparent; cursor: pointer;
+  transition: transform .13s, border-color .13s; flex-shrink: 0;
+}
+.colorDot:hover { transform: scale(1.1); }
+.colorSelected  { border-color: white !important; transform: scale(1.1); }
+
+.modalActions { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+
+@media (max-width: 1023px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+
+@media (max-width: 767px) {
+  .hero       { padding: 16px; }
+  .heroAmount { font-size: 26px; }
+  .heroRate   { font-size: 24px; }
+  .heroRight  { text-align: left; }
+  .grid       { grid-template-columns: 1fr; gap: 10px; }
+  .card       { padding: 14px; }
+  .goalAmount { font-size: 18px; }
+  .formRow    { grid-template-columns: 1fr; }
+  .modalActions { flex-direction: column; }
+  .modalActions > * { width: 100%; }
+}

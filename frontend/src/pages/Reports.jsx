@@ -1,11 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { Line, Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS, CategoryScale, LinearScale, BarElement,
   LineElement, PointElement, Filler, Tooltip, Legend,
 } from 'chart.js';
 import { analyticsAPI, transactionsAPI } from '../services/api';
-import { catColor, downloadBlob } from '../utils/helpers';
+import { catColor, downloadBlob, translateCategory } from '../utils/helpers';
 import { useFmt } from '../hooks/useFmt';
 import { PageHeader, Card, Button, Spinner } from '../components/layout/UI';
 import toast from 'react-hot-toast';
@@ -14,8 +15,9 @@ import styles from './Reports.module.css';
 ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointElement, Filler, Tooltip, Legend);
 
 export default function Reports() {
-  const fmt = useFmt();
-  const now = new Date();
+  const fmt          = useFmt();
+  const { t, i18n } = useTranslation();
+  const now          = new Date();
 
   const { data: monthly, isLoading } = useQuery({
     queryKey: ['monthly-12'],
@@ -54,7 +56,7 @@ export default function Reports() {
   const lineData = {
     labels,
     datasets: [{
-      label: 'Баланс', data: balanceArr,
+      label: t('common.balance'), data: balanceArr,
       borderColor: '#2dd4a0', backgroundColor: 'rgba(45,212,160,.08)',
       fill: true, tension: .4, pointRadius: 3, pointBackgroundColor: '#2dd4a0',
     }],
@@ -63,8 +65,8 @@ export default function Reports() {
   const barData = {
     labels,
     datasets: [
-      { label: 'Дохід',   data: incomeArr,  backgroundColor: 'rgba(45,212,160,.25)', borderColor: '#2dd4a0', borderWidth: 1.5, borderRadius: 5 },
-      { label: 'Витрати', data: expenseArr, backgroundColor: 'rgba(249,112,112,.2)',  borderColor: '#f97070', borderWidth: 1.5, borderRadius: 5 },
+      { label: t('common.income'),  data: incomeArr,  backgroundColor: 'rgba(45,212,160,.25)', borderColor: '#2dd4a0', borderWidth: 1.5, borderRadius: 5 },
+      { label: t('common.expense'), data: expenseArr, backgroundColor: 'rgba(249,112,112,.2)',  borderColor: '#f97070', borderWidth: 1.5, borderRadius: 5 },
     ],
   };
 
@@ -75,8 +77,8 @@ export default function Reports() {
     try {
       const res = await transactionsAPI.exportCSV();
       downloadBlob(res.data, `finflow-${now.getFullYear()}-${now.getMonth() + 1}.csv`);
-      toast.success('Звіт завантажено');
-    } catch { toast.error('Помилка завантаження'); }
+      toast.success(t('reports.downloaded'));
+    } catch { toast.error(t('reports.downloadError')); }
   };
 
   if (isLoading) return <Spinner />;
@@ -84,27 +86,27 @@ export default function Reports() {
   return (
     <div className={styles.page}>
       <PageHeader
-        title="Звіти"
-        subtitle="Аналітика за 12 місяців"
-        action={<Button variant="ghost" onClick={handleExport}>⬇ CSV звіт</Button>}
+        title={t('reports.title')}
+        subtitle={t('reports.subtitle')}
+        action={<Button variant="ghost" onClick={handleExport}>{t('reports.downloadCSV')}</Button>}
       />
 
       <div className={styles.chartsRow}>
         <Card>
-          <div className={styles.cardTitle}>Тренд балансу (12 міс.)</div>
+          <div className={styles.cardTitle}>{t('reports.balanceTrend')}</div>
           <Line data={lineData} options={{ responsive: true, plugins: { legend: LEGEND }, scales: SCALE_OPTS }} />
         </Card>
         <Card>
-          <div className={styles.cardTitle}>Доходи vs Витрати</div>
+          <div className={styles.cardTitle}>{t('reports.incomeVsExpense')}</div>
           <Bar data={barData} options={{ responsive: true, plugins: { legend: LEGEND }, scales: SCALE_OPTS }} />
         </Card>
       </div>
 
       <Card>
-        <div className={styles.cardTitle}>Топ витрат цього місяця</div>
+        <div className={styles.cardTitle}>{t('reports.topExpenses')}</div>
         {cats.length === 0 ? (
           <p style={{ color: 'var(--text3)', textAlign: 'center', padding: '28px 0', fontSize: 14 }}>
-            Немає даних за цей місяць
+            {t('reports.noData')}
           </p>
         ) : (
           <div className={styles.catList}>
@@ -114,7 +116,8 @@ export default function Reports() {
                 <div key={c._id} className={styles.catRow}>
                   <div className={styles.catHead}>
                     <span className={styles.catDot} style={{ background: catColor(c._id) }} />
-                    <span className={styles.catName}>{c._id}</span>
+                    {/* Translated category name */}
+                    <span className={styles.catName}>{translateCategory(c._id, i18n.language)}</span>
                     <span className={styles.catAmt} style={{ color: catColor(c._id) }}>{fmt(c.total)}</span>
                   </div>
                   <div className={styles.catTrack}>

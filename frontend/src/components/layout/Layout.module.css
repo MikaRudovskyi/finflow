@@ -4,7 +4,6 @@
   position: relative;
 }
 
-/* ── SIDEBAR ──────────────────────────────────────────────── */
 .sidebar {
   width: 224px;
   min-height: 100vh;
@@ -23,65 +22,51 @@
 }
 
 .logo {
-  font-size: 19px;
-  font-weight: 600;
+  font-size: 19px; font-weight: 600;
   padding: 0 8px 18px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  display: flex; align-items: center; gap: 10px;
   color: var(--text);
 }
 .logoIcon {
-  width: 32px; height: 32px;  
-  border-radius: 9px;
+  width: 32px; height: 32px;
   display: flex; align-items: center; justify-content: center;
   font-size: 16px; flex-shrink: 0;
 }
 
 .sectionLabel {
-  font-size: 11px;
-  color: var(--text3);
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  padding: 6px 10px 2px;
-  display: block;
+  font-size: 11px; color: var(--text3);
+  text-transform: uppercase; letter-spacing: .08em;
+  padding: 6px 10px 2px; display: block;
 }
 .spacer { height: 1px; background: var(--border); margin: 8px 0; }
 
 .navItem {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding: 10px;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-size: 14px;
-  color: var(--text2);
-  text-decoration: none;
-  transition: background .13s, color .13s;
+  display: flex; align-items: center; gap: 9px;
+  padding: 10px; border-radius: var(--radius-sm);
+  cursor: pointer; font-size: 14px; color: var(--text2);
+  text-decoration: none; transition: background .13s, color .13s;
   min-height: 44px;
 }
 .navItem:hover  { background: var(--bg3); color: var(--text); }
 .navItem.active { background: var(--green-dim); color: var(--green); font-weight: 500; }
 .navIcon { font-size: 16px; width: 22px; text-align: center; flex-shrink: 0; }
 
+.langWrap { margin: 8px 0 4px; }
+
 .user {
   margin-top: auto;
   padding: 11px 10px;
   background: var(--bg3);
   border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  gap: 9px;
+  display: flex; align-items: center; gap: 9px;
 }
 .avatar {
-  width: 34px; height: 34px;
-  border-radius: 50%;
+  width: 34px; height: 34px; border-radius: 50%;
   background: var(--purple);
   display: flex; align-items: center; justify-content: center;
   font-size: 12px; font-weight: 600; flex-shrink: 0;
 }
-.userInfo  { flex: 1; min-width: 0; }
+.userInfo { flex: 1; min-width: 0; }
 .userName  { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .userEmail { font-size: 11px; color: var(--text3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .logoutBtn {
@@ -91,80 +76,48 @@
 }
 .logoutBtn:hover { color: var(--red); }
 
-.content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-.main {
-  flex: 1;
-  padding: 28px;
-  overflow-x: hidden;
-}
-.footer {
-  text-align: center;
-  padding: 14px 28px;
-  font-size: 12px;
-  color: var(--text3);
-  border-top: 1px solid var(--border);
-  background: var(--bg2);
+.content { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.main    { flex: 1; padding: 28px; overflow-x: hidden; }
+.footer  {
+  text-align: center; padding: 14px 28px;
+  font-size: 12px; color: var(--text3);
+  border-top: 1px solid var(--border); background: var(--bg2);
 }
 
 .topbar {
   display: none;
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: 56px;
-  background: var(--bg2);
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 56px; background: var(--bg2);
   border-bottom: 1px solid var(--border);
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 16px;
-  z-index: 200;
+  align-items: center; justify-content: space-between;
+  padding: 0 16px; z-index: 200;
 }
-.topbarLogo {
-  font-size: 17px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+.topbarLogo { font-size: 17px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
 .topbarAvatar {
-  width: 32px; height: 32px;
-  border-radius: 50%;
+  width: 32px; height: 32px; border-radius: 50%;
   background: var(--purple);
   display: flex; align-items: center; justify-content: center;
   font-size: 11px; font-weight: 600;
 }
 
 .burger {
-  background: none; border: none; cursor: pointer;
-  padding: 6px;
+  background: none; border: none; cursor: pointer; padding: 6px;
   display: flex; flex-direction: column; gap: 5px;
-  min-width: 40px; min-height: 40px;
-  align-items: center; justify-content: center;
+  min-width: 40px; min-height: 40px; align-items: center; justify-content: center;
 }
 .burger span {
-  display: block;
-  width: 22px; height: 2px;
-  background: var(--text);
-  border-radius: 2px;
-  transition: transform .22s, opacity .22s;
-  transform-origin: center;
+  display: block; width: 22px; height: 2px;
+  background: var(--text); border-radius: 2px;
+  transition: transform .22s, opacity .22s; transform-origin: center;
 }
 .burgerOpen span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .burgerOpen span:nth-child(2) { opacity: 0; transform: scaleX(0); }
 .burgerOpen span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 .overlay {
-  display: none;
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.55);
-  z-index: 149;
-  opacity: 0;
-  transition: opacity .25s;
-  pointer-events: none;
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.55); z-index: 149;
+  opacity: 0; transition: opacity .25s; pointer-events: none;
 }
 .overlayVisible { opacity: 1; pointer-events: all; }
 
@@ -175,11 +128,8 @@
 
 @media (max-width: 767px) {
   .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    overflow-y: auto;
+    position: fixed; top: 0; left: 0;
+    height: 100vh; overflow-y: auto;
     transform: translateX(-100%);
     transition: transform .25s ease;
     z-index: 150;
@@ -187,13 +137,10 @@
     padding-top: 72px;
   }
   .sidebarOpen { transform: translateX(0); }
-
-  .overlay { display: block; }
-
-  .topbar { display: flex; }
-
-  .content { padding-top: 56px; }
-
-  .main   { padding: 14px; }
-  .footer { padding: 12px 14px; }
+  .logo        { display: none; }
+  .overlay     { display: block; }
+  .topbar      { display: flex; }
+  .content     { padding-top: 56px; }
+  .main        { padding: 14px; }
+  .footer      { padding: 12px 14px; }
 }

@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import useAuthStore from '../../store/authStore';
+import LanguageSwitcher from './LanguageSwitcher';
 import styles from './Layout.module.css';
 
 export default function Layout() {
   const { user, logout } = useAuthStore();
-  const navigate  = useNavigate();
-  const location  = useLocation();
+  const { t }            = useTranslation();
+  const navigate         = useNavigate();
+  const location         = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => { setMenuOpen(false); }, [location.pathname]);
-
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
@@ -20,7 +22,7 @@ export default function Layout() {
 
   const initials = user?.name
     ? user.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
-    : 'ФФ';
+    : 'FF';
 
   const NavItem = ({ to, icon, label, end = false }) => (
     <NavLink
@@ -39,7 +41,7 @@ export default function Layout() {
         <button
           className={`${styles.burger} ${menuOpen ? styles.burgerOpen : ''}`}
           onClick={() => setMenuOpen(v => !v)}
-          aria-label="Меню"
+          aria-label="Menu"
         >
           <span /><span /><span />
         </button>
@@ -60,26 +62,30 @@ export default function Layout() {
           FinFlow
         </div>
 
-        <span className={styles.sectionLabel}>Головна</span>
-        <NavItem to="/"             icon="📊" label="Dashboard"   end />
-        <NavItem to="/transactions" icon="↕️" label="Транзакції"      />
+        <span className={styles.sectionLabel}>{t('nav.main')}</span>
+        <NavItem to="/"             icon="📊" label={t('nav.dashboard')}    end />
+        <NavItem to="/transactions" icon="↕️" label={t('nav.transactions')}     />
 
         <div className={styles.spacer} />
-        <span className={styles.sectionLabel}>Планування</span>
-        <NavItem to="/budgets" icon="🎯" label="Бюджети"     />
-        <NavItem to="/savings" icon="🏦" label="Заощадження" />
-        <NavItem to="/reports" icon="📈" label="Звіти"       />
+        <span className={styles.sectionLabel}>{t('nav.planning')}</span>
+        <NavItem to="/budgets" icon="🎯" label={t('nav.budgets')}  />
+        <NavItem to="/savings" icon="🏦" label={t('nav.savings')}  />
+        <NavItem to="/reports" icon="📈" label={t('nav.reports')}  />
 
         <div className={styles.spacer} />
-        <NavItem to="/settings" icon="⚙️" label="Налаштування" />
+        <NavItem to="/settings" icon="⚙️" label={t('nav.settings')} />
+
+        <div className={styles.langWrap}>
+          <LanguageSwitcher />
+        </div>
 
         <div className={styles.user}>
           <div className={styles.avatar}>{initials}</div>
           <div className={styles.userInfo}>
-            <div className={styles.userName}>{user?.name || 'Користувач'}</div>
+            <div className={styles.userName}>{user?.name || 'User'}</div>
             <div className={styles.userEmail}>{user?.email}</div>
           </div>
-          <button className={styles.logoutBtn} onClick={handleLogout} title="Вийти">⏻</button>
+          <button className={styles.logoutBtn} onClick={handleLogout} title={t('common.logout')}>⏻</button>
         </div>
       </nav>
 

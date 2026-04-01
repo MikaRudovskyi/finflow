@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 import useAuthStore from '../store/authStore';
+import LanguageSwitcher from '../components/layout/LanguageSwitcher';
 import styles from './Auth.module.css';
 
 export default function Login() {
+  const { t }              = useTranslation();
   const { login, loading } = useAuthStore();
-  const [form, setForm] = useState({ email: '', password: '' });
+  const [form, setForm]    = useState({ email: '', password: '' });
 
   const handle = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
 
@@ -14,39 +17,40 @@ export default function Login() {
     e.preventDefault();
     try {
       await login(form.email, form.password);
-      toast.success('Ласкаво просимо!');
+      toast.success(t('auth.welcomeBack'));
     } catch (err) {
-      toast.error(err.response?.data?.error || 'Помилка входу');
+      toast.error(err.response?.data?.error || t('auth.loginError'));
     }
   };
 
   return (
     <div className={styles.page}>
+        <div className={styles.langRow}>
+          <LanguageSwitcher />
+        </div>
       <div className={styles.box}>
-          <div className={styles.logo}>
-            <span className={styles.logoIcon}><img src="logo.png" alt="FinFlow Logo" /></span>
-            FinFlow
-          </div>
-        <h2 className={styles.title}>Увійти в акаунт</h2>
+
+        <div className={styles.logo}>💰 FinFlow</div>
+        <h2 className={styles.title}>{t('auth.login')}</h2>
 
         <form onSubmit={submit} className={styles.form}>
           <div className={styles.group}>
-            <label>Email</label>
+            <label>{t('auth.email')}</label>
             <input name="email" type="email" placeholder="you@example.com"
               value={form.email} onChange={handle} required />
           </div>
           <div className={styles.group}>
-            <label>Пароль</label>
-            <input name="password" type="password" placeholder="••••••••"
+            <label>{t('auth.password')}</label>
+            <input name="password" type="password" placeholder={t('auth.passwordPlaceholder')}
               value={form.password} onChange={handle} required />
           </div>
           <button type="submit" className={styles.btn} disabled={loading}>
-            {loading ? 'Вхід...' : 'Увійти'}
+            {loading ? t('auth.loginLoading') : t('auth.loginBtn')}
           </button>
         </form>
 
         <p className={styles.alt}>
-          Немає акаунту? <Link to="/register">Зареєструватись</Link>
+          {t('auth.noAccount')} <Link to="/register">{t('auth.registerLink')}</Link>
         </p>
       </div>
     </div>

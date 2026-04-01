@@ -17,7 +17,6 @@ const getSummary = async (req, res) => {
     const income  = agg.find(a => a._id === 'income')?.total  || 0;
     const expense = agg.find(a => a._id === 'expense')?.total || 0;
 
-    // Get balance = all-time income - all-time expense
     const allTime = await Transaction.aggregate([
       { $match: { userId: req.user._id } },
       { $group: { _id: '$type', total: { $sum: '$amount' } } },

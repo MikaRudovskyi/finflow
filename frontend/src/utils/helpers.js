@@ -33,6 +33,28 @@ export const CAT_META = {
   'Інше':       { color: '#9ca3af', icon: '📦' },
 };
 
+export const CAT_TRANSLATIONS = {
+  'Зарплата':   { en: 'Salary',        ru: 'Зарплата',     ja: '給料',        fi: 'Palkka'        },
+  'Фріланс':    { en: 'Freelance',     ru: 'Фриланс',      ja: 'フリーランス',  fi: 'Freelance'     },
+  'Інвестиції': { en: 'Investments',   ru: 'Инвестиции',   ja: '投資',         fi: 'Sijoitukset'   },
+  'Подарунок':  { en: 'Gift',          ru: 'Подарок',      ja: 'ギフト',       fi: 'Lahja'         },
+  'Продукти':   { en: 'Groceries',     ru: 'Продукты',     ja: '食料品',       fi: 'Ruokaostokset' },
+  'Транспорт':  { en: 'Transport',     ru: 'Транспорт',    ja: '交通',         fi: 'Liikenne'      },
+  'Комунальні': { en: 'Utilities',     ru: 'Коммунальные', ja: '光熱費',       fi: 'Laskut'        },
+  'Розваги':    { en: 'Entertainment', ru: 'Развлечения',  ja: '娯楽',         fi: 'Viihde'        },
+  "Здоров'я":   { en: 'Health',        ru: 'Здоровье',     ja: '健康',         fi: 'Terveys'       },
+  'Ресторани':  { en: 'Restaurants',   ru: 'Рестораны',    ja: 'レストラン',    fi: 'Ravintolat'    },
+  'Одяг':       { en: 'Clothing',      ru: 'Одежда',       ja: '衣類',         fi: 'Vaatteet'      },
+  'Освіта':     { en: 'Education',     ru: 'Образование',  ja: '教育',         fi: 'Koulutus'      },
+  'Інше':       { en: 'Other',         ru: 'Другое',       ja: 'その他',       fi: 'Muut'          },
+};
+
+export function translateCategory(name, language) {
+  if (!name) return name;
+  if (!language || language === 'ua') return name;
+  return CAT_TRANSLATIONS[name]?.[language] || name;
+}
+
 export function catColor(name) { return CAT_META[name]?.color || '#9ca3af'; }
 export function catIcon(name)  { return CAT_META[name]?.icon  || '📦'; }
 

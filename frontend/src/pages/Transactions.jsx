@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import * as XLSX from 'xlsx';
 import toast from 'react-hot-toast';
 import { transactionsAPI } from '../services/api';
 import { fmtDate, catColor, downloadBlob, translateCategory } from '../utils/helpers';
@@ -22,24 +23,72 @@ export default function Transactions() {
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['transactions', { typeFilter, catFilter, page }],
-    queryFn: () => transactionsAPI.getAll({ type: typeFilter || undefined, category: catFilter || undefined, limit: 30, page }).then(r => r.data),
+    queryFn: () => transactionsAPI.getAll({
+      type:     typeFilter || undefined,
+      category: catFilter  || undefined,
+      limit: 30, page,
+    }).then(r => r.data),
   });
 
   const deleteMutation = useMutation({
     mutationFn: (id) => transactionsAPI.remove(id),
-    onSuccess: () => { qc.invalidateQueries(['transactions']); qc.invalidateQueries(['summary']); toast.success(t('transactions.deleted')); },
+    onSuccess: () => {
+      qc.invalidateQueries(['transactions']);
+      qc.invalidateQueries(['summary']);
+      toast.success(t('transactions.deleted'));
+    },
     onError: () => toast.error(t('transactions.deleteError')),
   });
 
-  const handleExport = async () => {
-    try { const res = await transactionsAPI.exportCSV(); downloadBlob(res.data, 'finflow-transactions.csv'); toast.success(t('transactions.exportSuccess')); }
-    catch { toast.error(t('transactions.exportError')); }
+  const handleExportCSV = async () => {
+    try {
+      const res = await transactionsAPI.exportCSV();
+      downloadBlob(res.data, 'finflow-transactions.csv');
+      toast.success(t('transactions.exportSuccess'));
+    } catch { toast.error(t('transactions.exportError')); }
+  };
+
+  const handleExportExcel = async () => {
+    try {
+      const res  = await transactionsAPI.getAll({ limit: 9999 });
+      const txns = res.data.transactions || [];
+
+      if (txns.length === 0) {
+        toast.error('Немає транзакцій для експорту');
+        return;
+      }
+
+      const rows = txns.map(t2 => ({
+        [t('common.date')]:        fmtDate(t2.date),
+        [t('common.description')]: t2.note || '—',
+        [t('common.category')]:    translateCategory(t2.category, i18n.language),
+        [t('common.type')]:        t2.type === 'income' ? t('common.income') : t('common.expense'),
+        [t('common.amount')]:      t2.amount,
+      }));
+
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.json_to_sheet(rows);
+
+      ws['!cols'] = [
+        { wch: 14 },
+        { wch: 28 },
+        { wch: 16 },
+        { wch: 12 },
+        { wch: 12 },
+      ];
+
+      XLSX.utils.book_append_sheet(wb, ws, 'Transactions');
+      XLSX.writeFile(wb, 'finflow-transactions.xlsx');
+      toast.success('Excel файл завантажено');
+    } catch (err) {
+      console.error(err);
+      toast.error('Помилка експорту Excel');
+    }
   };
 
   const txns = (data?.transactions || []).filter(t2 => {
     if (!search) return true;
     const q = search.toLowerCase();
-    // Search in both original and translated category name
     return t2.note?.toLowerCase().includes(q)
       || t2.category.toLowerCase().includes(q)
       || translateCategory(t2.category, i18n.language).toLowerCase().includes(q);
@@ -56,7 +105,8 @@ export default function Transactions() {
         subtitle={`${data?.total || 0} ${t('common.records')}`}
         action={
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            <Button variant="ghost" onClick={handleExport}>⬇ CSV</Button>
+            <Button variant="ghost" onClick={handleExportCSV}>⬇ CSV</Button>
+            <Button variant="ghost" onClick={handleExportExcel}>⬇ Excel</Button>
             <Button onClick={() => setShowModal(true)}>{t('transactions.new')}</Button>
           </div>
         }
@@ -64,15 +114,21 @@ export default function Transactions() {
 
       <Card>
         <div className={styles.filters}>
-          <input className={styles.search} placeholder={`🔍  ${t('common.search')}`} value={search} onChange={e => setSearch(e.target.value)} />
-          <select className={styles.sel} value={typeFilter} onChange={e => { setTypeFilter(e.target.value); setPage(1); }}>
+          <input
+            className={styles.search}
+            placeholder={`🔍  ${t('common.search')}`}
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
+          <select className={styles.sel} value={typeFilter}
+            onChange={e => { setTypeFilter(e.target.value); setPage(1); }}>
             <option value="">{t('transactions.allTypes')}</option>
             <option value="income">{t('transactions.incomeType')}</option>
             <option value="expense">{t('transactions.expenseType')}</option>
           </select>
-          <select className={styles.sel} value={catFilter} onChange={e => { setCatFilter(e.target.value); setPage(1); }}>
+          <select className={styles.sel} value={catFilter}
+            onChange={e => { setCatFilter(e.target.value); setPage(1); }}>
             <option value="">{t('transactions.allCategories')}</option>
-            {/* Show translated category names in dropdown, but store original value */}
             {cats.map(c => (
               <option key={c} value={c}>
                 {translateCategory(c, i18n.language)}
@@ -109,7 +165,6 @@ export default function Transactions() {
                   <td>
                     <span className={styles.cat}>
                       <span className={styles.dot} style={{ background: catColor(t2.category) }} />
-                      {/* Translated category name */}
                       {translateCategory(t2.category, i18n.language)}
                     </span>
                   </td>

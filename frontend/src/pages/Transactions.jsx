@@ -44,7 +44,7 @@ export default function Transactions() {
     try {
       const res = await transactionsAPI.exportCSV();
       downloadBlob(res.data, 'finflow-transactions.csv');
-      toast.success(t('transactions.exportSuccess'));
+      toast.success(t('transactions.exportCSVSuccess'));
     } catch { toast.error(t('transactions.exportError')); }
   };
 
@@ -79,10 +79,10 @@ export default function Transactions() {
 
       XLSX.utils.book_append_sheet(wb, ws, 'Transactions');
       XLSX.writeFile(wb, 'finflow-transactions.xlsx');
-      toast.success('Excel файл завантажено');
+      toast.success(t('transactions.exportExcelSuccess'));
     } catch (err) {
       console.error(err);
-      toast.error('Помилка експорту Excel');
+      toast.error(t('transactions.exportError'));
     }
   };
 

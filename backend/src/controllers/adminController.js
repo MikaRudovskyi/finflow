@@ -2,7 +2,6 @@ const User        = require('../models/User');
 const Transaction = require('../models/Transaction');
 const Budget      = require('../models/Budget');
 
-// GET /api/admin/stats
 const getStats = async (req, res) => {
   try {
     const [
@@ -45,7 +44,6 @@ const getStats = async (req, res) => {
   }
 };
 
-// GET /api/admin/users?page=1&limit=20&search=
 const getUsers = async (req, res) => {
   try {
     const { page = 1, limit = 20, search = '' } = req.query;
@@ -61,7 +59,6 @@ const getUsers = async (req, res) => {
       .limit(Number(limit))
       .select('-passwordHash');
 
-    // Attach transaction count per user
     const userIds  = users.map(u => u._id);
     const txCounts = await Transaction.aggregate([
       { $match: { userId: { $in: userIds } } },
@@ -82,7 +79,6 @@ const getUsers = async (req, res) => {
   }
 };
 
-// GET /api/admin/users/:id
 const getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select('-passwordHash');
@@ -106,7 +102,6 @@ const getUserById = async (req, res) => {
   }
 };
 
-// PUT /api/admin/users/:id
 const updateUser = async (req, res) => {
   try {
     const { name, email, currency } = req.body;
@@ -122,13 +117,11 @@ const updateUser = async (req, res) => {
   }
 };
 
-// DELETE /api/admin/users/:id
 const deleteUser = async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
     if (!user) return res.status(404).json({ error: 'User not found' });
 
-    // Delete all user data
     await Promise.all([
       Transaction.deleteMany({ userId: req.params.id }),
       Budget.deleteMany({ userId: req.params.id }),
@@ -140,7 +133,6 @@ const deleteUser = async (req, res) => {
   }
 };
 
-// GET /api/admin/transactions?page=1&limit=30&userId=&type=
 const getTransactions = async (req, res) => {
   try {
     const { page = 1, limit = 30, userId, type, search } = req.query;
@@ -163,7 +155,6 @@ const getTransactions = async (req, res) => {
   }
 };
 
-// DELETE /api/admin/transactions/:id
 const deleteTransaction = async (req, res) => {
   try {
     const txn = await Transaction.findByIdAndDelete(req.params.id);
@@ -174,7 +165,6 @@ const deleteTransaction = async (req, res) => {
   }
 };
 
-// GET /api/admin/budgets
 const getBudgets = async (req, res) => {
   try {
     const { page = 1, limit = 30 } = req.query;
@@ -192,4 +182,23 @@ const getBudgets = async (req, res) => {
   }
 };
 
-module.exports = { getStats, getUsers, getUserById, updateUser, deleteUser, getTransactions, deleteTransaction, getBudgets };
+const changePassword = async (req, res) => {
+  try {
+    const { password } = req.body;
+    if (!password || password.length < 6) {
+      return res.status(400).json({ error: 'Password must be at least 6 characters.' });
+    }
+
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+
+    user.passwordHash = password;
+    await user.save();
+
+    res.json({ message: 'Password changed successfully.' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+module.exports = { getStats, getUsers, getUserById, updateUser, deleteUser, changePassword, getTransactions, deleteTransaction, getBudgets };

@@ -11,6 +11,7 @@ const transactionRoutes = require('./routes/transactions');
 const budgetRoutes      = require('./routes/budgets');
 const categoryRoutes    = require('./routes/categories');
 const analyticsRoutes   = require('./routes/analytics');
+const adminRoutes = require('./routes/admin');
 
 const app = express();
 
@@ -66,6 +67,7 @@ app.use('/api/transactions', transactionRoutes);
 app.use('/api/budgets',      budgetRoutes);
 app.use('/api/categories',   categoryRoutes);
 app.use('/api/analytics',    analyticsRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
